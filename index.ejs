@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>เว็บขายของสุดกาก</title>
+  <!-- ตัด Bootstrap ทิ้งเพื่อความกากระดับตำนาน -->
+</head>
+<body bgcolor="#FFFF00" text="blue"> <!-- พื้นหลังเหลือง ตัวอักษรน้ำเงิน ตีกันสุดๆ -->
+
+  <center>
+    <h1><font color="red" size="7">=== Supermarket KIMDISNY ===</font></h1>
+    <marquee>ยินดีต้อนรับสู่ระบบจัดการสินค้าที่กากที่สุดในโลก!!!</marquee>
+    <br>
+    <a href="/products/new" style="background-color: lime; padding: 10px; border: 5px double red;">[ + ] เพิ่มสินค้าตรงนี้จ้า</a>
+  </center>
+
+  <hr border="5">
+
+  <div style="padding: 20px;">
+    <!-- แจ้งเตือนแบบบ้านๆ -->
+    <% if (success) { %>
+      <h2 style="color: white; background: black;">สถานะ: <%= success %> สำเร็จแล้วนะ!</h2>
+    <% } %>
+
+    <h3>ค้นหาที่นี่:</h3>
+    <form action="/" method="GET">
+        <input type="text" name="search" value="<%= search %>" style="width: 80%;">
+        <button type="submit" style="cursor: help;">กดค้นหา</button>
+    </form>
+
+    <br>
+
+    <table border="10" cellpadding="15" cellspacing="5" bgcolor="#FFFFFF" width="100%">
+      <thead bgcolor="pink">
+        <tr>
+          <th>ลำดับ</th>
+          <th>หน้าตาสินค้า</th>
+          <th>ชื่อ</th>
+          <th>หมวด</th>
+          <th>ราคา</th>
+          <th>สต็อก</th>
+          <th>ปุ่มกด</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (products.length === 0) { %>
+          <tr>
+            <td colspan="7" align="center"><h1>ไม่มีของว้อยยย!</h1></td>
+          </tr>
+        <% } %>
+        <% products.forEach((p, i) => { %>
+        <tr>
+          <td align="center"><%= i + 1 %></td>
+          <td>
+            <% if (p.image && p.image !== 'no-image.png') { %>
+              <!-- รูปใหญ่บ้างเล็กบ้าง ไม่จัดขนาด -->
+              <img src="/uploads/<%= p.image %>" width="150">
+            <% } else { %>
+              ไม่มีรูป
+            <% } %>
+          </td>
+          <td><b><%= p.name %></b></td>
+          <td><i><%= p.category %></i></td>
+          <td><font color="green" size="5"><%= p.price %></font> บาท</td>
+          <td>
+            <% if (p.stock == 0) { %>
+              <blink><font color="red">หมดเกลี้ยง!</font></blink>
+            <% } else { %>
+              <%= p.stock %>
+            <% } %>
+          </td>
+          <td>
+            <a href="/products/<%= p.id %>/edit">แก้ข้อมูล</a>
+            <br><br>
+            <!-- ลบแบบไม่มี Modal เตือน (ลบเลย) เพื่อความกาก -->
+            <form action="/products/<%= p.id %>?_method=DELETE" method="POST">
+                <button type="submit" style="color: white; background: red;">ลบทิ้งซะ!</button>
+            </form>
+          </td>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+
+  <p align="right">สร้างโดย: KIMDISNY (เด็กคอม 67)</p>
+
+</body>
+</html>
